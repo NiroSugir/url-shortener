@@ -15,7 +15,7 @@ const SlugCreator = ({ onSubmit }) => {
         type="text"
         placeholder="url"
         name="url"
-        ref={register({ required: true, max: 1024, min: 11, maxLength: 1024 })}
+        ref={register({ required: true, minLength: 11, maxLength: 1024 })}
       />
 
       <input
@@ -23,8 +23,7 @@ const SlugCreator = ({ onSubmit }) => {
         placeholder="slug"
         name="slug"
         ref={register({
-          max: 21,
-          min: 1,
+          minLength: 1,
           maxLength: 21,
           pattern: /[a-zA-Z0-9_-]/i,
         })}
