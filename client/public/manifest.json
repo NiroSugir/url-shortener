@@ -1,0 +1,9 @@
+{
+  "short_name": "Url Shortener",
+  "name": "Pocket-size your address",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
