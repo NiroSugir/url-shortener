@@ -26,7 +26,7 @@ const SlugCreator = ({ onSubmit }) => {
           max: 21,
           min: 1,
           maxLength: 21,
-          pattern: /[a-zA-Z0-9_\-]/i,
+          pattern: /[a-zA-Z0-9_-]/i,
         })}
       />
 
