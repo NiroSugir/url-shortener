@@ -30,7 +30,7 @@ const SlugCreator = ({ onSubmit }) => {
         })}
       />
 
-      <input type="submit" />
+      <button type="submit">Generate</button>
     </form>
   );
 };
