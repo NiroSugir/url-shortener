@@ -1,9 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useStyles } from "../theme";
-import { TextField, Button, Typography } from "@material-ui/core";
+import { TextField, Button, Typography, Box } from "@material-ui/core";
 
-const SlugCreator = ({ onSubmit }) => {
+const SlugCreator = ({ onSubmit, shortener_url }) => {
   const classes = useStyles();
   const { register, handleSubmit, errors, watch } = useForm();
 
@@ -55,10 +55,12 @@ const SlugCreator = ({ onSubmit }) => {
         })}
       />
 
-      <Typography variant="caption" display="block">
-        new alias: https://nirosugir.com/
-        {slug === "" ? <em>random</em> : <u>{slug}</u>}
-      </Typography>
+      <Box mt={2} textAlign="right">
+        <Typography variant="caption" display="block">
+          shortened url: {shortener_url}/
+          {slug === "" ? <em>random</em> : <u>{slug}</u>}
+        </Typography>
+      </Box>
 
       <Button
         type="submit"
