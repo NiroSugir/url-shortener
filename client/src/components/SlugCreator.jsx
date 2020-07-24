@@ -7,11 +7,6 @@ const SlugCreator = ({ onSubmit }) => {
   const classes = useStyles();
   const { register, handleSubmit, errors, watch } = useForm();
 
-  // TODO: show appropriate error message on screen when there are any
-  if (Object.keys(errors).length) {
-    console.log("errors", errors);
-  }
-
   // get the value of slug as it changes (if it ever does). an empty slug means,
   // the server will have to generate one.
   const slug = watch("slug", "");
