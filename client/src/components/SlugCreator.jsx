@@ -8,6 +8,7 @@ const SlugCreator = ({ onSubmit }) => {
   if (Object.keys(errors).length) {
     console.log("errors", errors);
   }
+  console.log("hi");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

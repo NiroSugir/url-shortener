@@ -1,8 +1,14 @@
 import React from "react";
-import { Routes } from "./Routes";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import HomePage from "../pages/HomePage";
 
 const App = () => {
-  return <Routes />;
+  return (
+    <Router>
+      <Route path="/" exact component={HomePage} />
+      <Route path="/urls" exact component={() => <div>Urls List</div>} />
+    </Router>
+  );
 };
 
 export default App;
