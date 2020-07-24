@@ -1,20 +1,27 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useStyles } from "../theme";
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, Typography } from "@material-ui/core";
 
 const SlugCreator = ({ onSubmit }) => {
   const classes = useStyles();
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, watch } = useForm();
 
   // TODO: show appropriate error message on screen when there are any
   if (Object.keys(errors).length) {
     console.log("errors", errors);
   }
-  console.log("hi");
+
+  // get the value of slug as it changes (if it ever does). an empty slug means,
+  // the server will have to generate one.
+  const slug = watch("slug", "");
 
   return (
     <form className={classes.form} onSubmit={handleSubmit(onSubmit)} noValidate>
+      <Typography variant="overline" color="error">
+        {errors.url && errors.url.message}
+      </Typography>
+
       <TextField
         variant="outlined"
         margin="normal"
@@ -28,7 +35,11 @@ const SlugCreator = ({ onSubmit }) => {
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck={false}
-        ref={register({ required: true, minLength: 11, maxLength: 1024 })}
+        inputRef={register({
+          required: "An address is required!",
+          minLength: 11,
+          maxLength: 1024,
+        })}
       />
 
       <TextField
@@ -42,12 +53,17 @@ const SlugCreator = ({ onSubmit }) => {
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck={false}
-        ref={register({
+        inputRef={register({
           minLength: 1,
           maxLength: 21,
           pattern: /[a-zA-Z0-9_-]/i,
         })}
       />
+
+      <Typography variant="caption" display="block">
+        new alias: https://nirosugir.com/
+        {slug === "" ? <em>random</em> : <u>{slug}</u>}
+      </Typography>
 
       <Button
         type="submit"
