@@ -32,10 +32,17 @@ const SlugCreator = ({ onSubmit, shortener_url }) => {
         spellCheck={false}
         inputRef={register({
           required: "An address is required!",
-          minLength: 11,
-          maxLength: 1024,
+
+          // basic validation. the real validation is done server-side
+          // that makes sure this is a valid url
+          minLength: { value: 11, message: "Invalid Url" },
+          maxLength: { value: 1024, message: "Invalid Url" },
         })}
       />
+
+      <Typography variant="overline" color="error">
+        {errors.slug && errors.slug.message}
+      </Typography>
 
       <TextField
         variant="outlined"
@@ -49,8 +56,7 @@ const SlugCreator = ({ onSubmit, shortener_url }) => {
         autoCapitalize="off"
         spellCheck={false}
         inputRef={register({
-          minLength: 1,
-          maxLength: 21,
+          maxLength: { value: 21, message: "Path too long" },
           pattern: /[a-zA-Z0-9_-]/i,
         })}
       />
