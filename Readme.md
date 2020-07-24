@@ -16,3 +16,8 @@ The app includes a simple table that lists all the urls that were added includin
   - use Material-UI for the design
 
 - Use express for backend server. Shouldnt require more than 3 endpoints for the shortener. One more for listing all the shortened urls for a total of 4.
+
+## Future Feature
+
+- make it possible for not just urls, but also email addresses
+  - useful for hiding email in public formums from bots
