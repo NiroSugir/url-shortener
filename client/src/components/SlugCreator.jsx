@@ -1,7 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useStyles } from "../theme";
+import { TextField, Button } from "@material-ui/core";
 
 const SlugCreator = ({ onSubmit }) => {
+  const classes = useStyles();
   const { register, handleSubmit, errors } = useForm();
 
   // TODO: show appropriate error message on screen when there are any
@@ -11,18 +14,34 @@ const SlugCreator = ({ onSubmit }) => {
   console.log("hi");
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        type="text"
-        placeholder="url"
+    <form className={classes.form} onSubmit={handleSubmit(onSubmit)} noValidate>
+      <TextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        id="url"
         name="url"
+        label="Url"
+        autoFocus
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
         ref={register({ required: true, minLength: 11, maxLength: 1024 })}
       />
 
-      <input
-        type="text"
-        placeholder="slug"
+      <TextField
+        variant="outlined"
+        margin="normal"
+        fullWidth
+        id="slug"
         name="slug"
+        label="customize (optional)"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
         ref={register({
           minLength: 1,
           maxLength: 21,
@@ -30,7 +49,15 @@ const SlugCreator = ({ onSubmit }) => {
         })}
       />
 
-      <button type="submit">Generate</button>
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        color="primary"
+        className={classes.submit}
+      >
+        Generate
+      </Button>
     </form>
   );
 };
