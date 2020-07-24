@@ -1,11 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "fontsource-roboto";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <App />
+    </Container>
   </React.StrictMode>,
   document.getElementById("root")
 );
