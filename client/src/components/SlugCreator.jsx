@@ -24,7 +24,7 @@ const SlugCreator = ({ onSubmit, shortener_url }) => {
         fullWidth
         id="url"
         name="url"
-        label="Url"
+        label="Url to shorten"
         autoFocus
         autoComplete="off"
         autoCorrect="off"
@@ -50,7 +50,7 @@ const SlugCreator = ({ onSubmit, shortener_url }) => {
         fullWidth
         id="slug"
         name="slug"
-        label="customize (optional)"
+        label="Custom Path (optional)"
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
