@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  redis:
+    container_name: redis
+    image: redis:6.0.6-alpine3.12
+    command: ["redis-server", "/data/redis.conf"]
+    volumes:
+      - ./redis:/data:rw
+    networks:
+      - short-url-net
+
+networks:
+  short-url-net:
+    driver: bridge
