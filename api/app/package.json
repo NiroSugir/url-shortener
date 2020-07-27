@@ -1,0 +1,22 @@
+{
+  "name": "@url-shortener/api",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "Niroshan Sugirtharatnam <codeniro@gmail.com>",
+  "license": "UNLICENSED",
+  "main": "src/index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "redis": "^3.0.2"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon -L src/index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}

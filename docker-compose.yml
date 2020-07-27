@@ -1,8 +1,24 @@
 version: "3"
 
 services:
+  api:
+    container_name: url_shortener_api
+    restart: always
+    build: ./api
+    environment:
+      - PORT=3010
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    networks:
+      - short-url-net
+    command: ["npm", "run", "dev"]
+    volumes:
+      - ./api/app/src:/usr/src/app/src
+
   redis:
-    container_name: redis
+    container_name: url_shortener_redis
     image: redis:6.0.6-alpine3.12
     command: ["redis-server", "/data/redis.conf"]
     volumes:
