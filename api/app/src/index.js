@@ -1,18 +1,7 @@
 const express = require("express");
 const redis = require("redis");
 const morgan = require("morgan");
-
-const PORT = process.env.PORT;
-if (typeof PORT === "undefined")
-  throw new Error("Missing environment variable PORT");
-
-const REDIS_HOST = process.env.REDIS_HOST;
-if (typeof REDIS_HOST === "undefined")
-  throw new Error("Missing environment variable REDIS_HOST");
-
-const REDIS_PORT = process.env.REDIS_PORT;
-if (typeof REDIS_PORT === "undefined")
-  throw new Error("Missing environment variable REDIS_PORT");
+const { REDIS_HOST, REDIS_PORT, PORT } = require("./environment");
 
 const client = redis.createClient({ host: REDIS_HOST, port: REDIS_PORT });
 
