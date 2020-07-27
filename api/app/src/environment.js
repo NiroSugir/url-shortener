@@ -8,6 +8,8 @@ if (typeof process.env.REDIS_PORT !== "string")
   throw new Error("Missing environment variable REDIS_PORT");
 
 module.exports = {
+  NODE_ENV:
+    process.env.NODE_ENV === "production" ? "production" : "development",
   PORT: process.env.PORT,
   REDIS_HOST: process.env.REDIS_HOST,
   REDIS_PORT: process.env.REDIS_PORT,
