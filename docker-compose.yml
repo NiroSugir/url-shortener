@@ -1,15 +1,16 @@
 version: "3"
 
 services:
+  client:
+    container_name: url_shortener_client
+    image: nginx:1.19.1-alpine
+    networks:
+      - short-url-net
+
   api:
     container_name: url_shortener_api
     restart: always
     build: ./api
-    environment:
-      - HOSTNAME=https://url.nirosugir.com
-      - PORT=3010
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
     depends_on:
       - redis
     networks:

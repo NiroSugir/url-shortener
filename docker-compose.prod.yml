@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  client:
+    volumes:
+      - ./nginx/build:/usr/share/nginx/html:ro
+    ports:
+      - 80:80
+
+  api:
+    environment:
+      - HOSTNAME=https://url.nirosugir.com
+      - PORT=3010
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
