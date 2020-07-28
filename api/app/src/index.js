@@ -12,6 +12,8 @@ const {
 const client = redis.createClient({ host: REDIS_HOST, port: REDIS_PORT });
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(morgan(NODE_ENV === "production" ? "tiny" : "dev"));
 
@@ -30,7 +32,8 @@ app.post("/create", (req, res) => {
 
   // TODO: add to db
 
-  res.sendStatus(200);
+  // TODO: substitute the placeholder with the real redirect address
+  res.send({ redirectUrl: "http://new-redirect", success: true });
 });
 
 app.get("/:slug", (req, res) => {
