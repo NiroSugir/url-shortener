@@ -1,6 +1,7 @@
 const express = require("express");
 const redis = require("redis");
 const morgan = require("morgan");
+import { createSlug } from "./lib/createSlug";
 const {
   NODE_ENV,
   REDIS_HOST,
@@ -18,18 +19,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan(NODE_ENV === "production" ? "tiny" : "dev"));
 
 const InvalidSlug = /[^a-z0-9_-]/i;
-
-const createSlug = (length) => {
-  const result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-};
 
 app.get("/", (_, res) => {
   res.send({
