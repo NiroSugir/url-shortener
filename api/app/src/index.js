@@ -82,7 +82,10 @@ app.post("/create", async (req, res) => {
 app.get("/:slug", (req, res) => {
   const { slug } = req.params;
 
-  // TODO: validate
+  // validate
+  if (typeof slug !== "string" || slug.length < 1) {
+    return res.sendStatus(404);
+  }
 
   // TODO: retrieve slug from database
 
