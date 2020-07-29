@@ -79,7 +79,7 @@ app.post("/create", async (req, res) => {
   });
 });
 
-app.get("/:slug", (req, res) => {
+app.get("/:slug", async (req, res) => {
   const { slug } = req.params;
 
   // validate
@@ -88,16 +88,15 @@ app.get("/:slug", (req, res) => {
   }
 
   // retrieve slug from database
-  const url = await client.get(`slug:${slug}`)
+  const url = await client.get(`slug:${slug}`);
   if (url === null) {
-    return res.sendStatus(404)
+    return res.sendStatus(404);
   }
 
   // TODO: add metric
 
   // redirect to url found for slug
-  // TODO: replace placeholder url with the one found in the database
-  res.redirect(307, HOSTNAME);
+  res.redirect(307, url);
 });
 
 app.use((err, req, res, next) => {
