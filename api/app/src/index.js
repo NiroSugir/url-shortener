@@ -17,16 +17,33 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(morgan(NODE_ENV === "production" ? "tiny" : "dev"));
 
+const InvalidSlug = /[^a-z0-9_-]/i;
+
 app.get("/", (_, res) => {
   res.send({
     message: `Redirection service. Go to ${HOSTNAME} to use the client. Copyright 2020 Niroshan Sugirtharatnam.`,
   });
 });
 
-app.post("/create", (req, res) => {
+app.post("/create", async (req, res) => {
   const { slug, url } = req.body;
 
-  // TODO: validate
+  // validate
+
+  // throw an error if it's an invalid url string
+  try {
+    new URL(url);
+  } catch (e) {
+    return res.send({ error: "Invalid url", success: false });
+  }
+
+  if (typeof slug === "string") {
+    if (InvalidSlug.test(slug)) {
+      return res.send({ error: "Invalid slug", success: false });
+    }
+  } else {
+    // create slug
+  }
 
   // TODO: create a slug if one wasn't provided
 
