@@ -87,7 +87,11 @@ app.get("/:slug", (req, res) => {
     return res.sendStatus(404);
   }
 
-  // TODO: retrieve slug from database
+  // retrieve slug from database
+  const url = await client.get(`slug:${slug}`)
+  if (url === null) {
+    return res.sendStatus(404)
+  }
 
   // TODO: add metric
 
