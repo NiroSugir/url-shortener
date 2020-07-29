@@ -28,7 +28,7 @@ app.get("/", (_, res) => {
   });
 });
 
-app.post("/create", async (req, res) => {
+app.post("/create", async (req, res, next) => {
   const { slug, url } = req.body;
 
   // validate
@@ -40,68 +40,76 @@ app.post("/create", async (req, res) => {
     return res.send({ error: "Invalid url.", success: false });
   }
 
-  // create a slug if one wasn't provided
-  if (typeof slug === "string" && slug.length > 0) {
-    if (slug.length > 12) {
+  try {
+    // create a slug if one wasn't provided
+    if (typeof slug === "string" && slug.length > 0) {
+      if (slug.length > 12) {
+        return res.send({
+          error: "Custom path is too long. May not be over 12 characters long.",
+          success: false,
+        });
+      }
+
+      if (InvalidSlug.test(slug)) {
+        return res.send({
+          error:
+            "Invalid custom path. May contain only letters, numbers, dash (-) and underscore (_).",
+          success: false,
+        });
+      }
+    } else {
+      // create slug
+      slug = createSlug(Math.ceil(Math.random() % 12));
+    }
+
+    // make sure the slug is unique (the url doesn't have to be however)
+    const slugExists = await client.get(`slug:${slug}`);
+    if (slugExists !== null) {
       return res.send({
-        error: "Custom path is too long. May not be over 12 characters long.",
+        error: "Custom path already exists. Please choose another.",
         success: false,
       });
     }
 
-    if (InvalidSlug.test(slug)) {
-      return res.send({
-        error:
-          "Invalid custom path. May contain only letters, numbers, dash (-) and underscore (_).",
-        success: false,
-      });
-    }
-  } else {
-    // create slug
-    slug = createSlug(Math.ceil(Math.random() % 12));
-  }
+    // add to db
+    // set expiration to auto-prune unused urls
+    await client.set(`slug:${slug}`, url, "EX", SLUG_EXPIRY);
 
-  // make sure the slug is unique (the url doesn't have to be however)
-  const slugExists = await client.get(`slug:${slug}`);
-  if (slugExists !== null) {
-    return res.send({
-      error: "Custom path already exists. Please choose another.",
-      success: false,
+    // substitute the placeholder with the real redirect address
+    res.send({
+      redirectUrl: `${HOSTNAME}/${slug}`,
+      success: true,
     });
+  } catch (e) {
+    next(e);
   }
-
-  // add to db
-  // set expiration to auto-prune unused urls
-  await client.set(`slug:${slug}`, url, SLUG_EXPIRY);
-
-  // substitute the placeholder with the real redirect address
-  res.send({
-    redirectUrl: `${HOSTNAME}/${slug}`,
-    success: true,
-  });
 });
 
-app.get("/:slug", async (req, res) => {
+app.get("/:slug", async (req, res, next) => {
   const { slug } = req.params;
 
-  // validate
-  if (typeof slug !== "string" || slug.length < 1) {
-    return res.sendStatus(404);
+  try {
+    // validate
+    if (typeof slug !== "string" || slug.length < 1) {
+      return res.sendStatus(404);
+    }
+
+    // retrieve slug from database
+    const url = await client.get(`slug:${slug}`);
+    if (url === null) {
+      return res.sendStatus(404);
+    }
+
+    // TODO: add metric
+
+    // prolong expiry for slugs that were actually used
+    await client.expire(`slug:${slug}`, SLUG_EXPIRY);
+
+    // redirect to url found for slug
+    res.redirect(307, url);
+  } catch (e) {
+    next(e);
   }
-
-  // retrieve slug from database
-  const url = await client.get(`slug:${slug}`);
-  if (url === null) {
-    return res.sendStatus(404);
-  }
-
-  // TODO: add metric
-
-  // prolong expiry for slugs that were actually used
-  await client.expire(`slug:${slug}`, SLUG_EXPIRY);
-
-  // redirect to url found for slug
-  res.redirect(307, url);
 });
 
 app.use((err, req, res, next) => {
