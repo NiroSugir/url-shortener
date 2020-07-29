@@ -9,6 +9,7 @@ const {
   REDIS_PORT,
   HOSTNAME,
   PORT,
+  SLUG_EXPIRY,
 } = require("./environment");
 
 const client = new Redis(REDIS_PORT, REDIS_HOST);
@@ -70,7 +71,8 @@ app.post("/create", async (req, res) => {
   }
 
   // add to db
-  await client.set(`slug:${slug}`, url);
+  // set expiration to auto-prune unused urls
+  await client.set(`slug:${slug}`, url, SLUG_EXPIRY);
 
   // substitute the placeholder with the real redirect address
   res.send({
@@ -94,6 +96,9 @@ app.get("/:slug", async (req, res) => {
   }
 
   // TODO: add metric
+
+  // prolong expiry for slugs that were actually used
+  await client.expire(`slug:${slug}`, SLUG_EXPIRY);
 
   // redirect to url found for slug
   res.redirect(307, url);
