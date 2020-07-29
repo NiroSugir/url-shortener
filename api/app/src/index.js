@@ -19,6 +19,18 @@ app.use(morgan(NODE_ENV === "production" ? "tiny" : "dev"));
 
 const InvalidSlug = /[^a-z0-9_-]/i;
 
+const createSlug = (length) => {
+  const result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
+
 app.get("/", (_, res) => {
   res.send({
     message: `Redirection service. Go to ${HOSTNAME} to use the client. Copyright 2020 Niroshan Sugirtharatnam.`,
@@ -37,15 +49,19 @@ app.post("/create", async (req, res) => {
     return res.send({ error: "Invalid url", success: false });
   }
 
-  if (typeof slug === "string") {
+  // TODO: create a slug if one wasn't provided
+  if (typeof slug === "string" && slug.length > 0) {
+    if (slug.length > 12) {
+      return res.send({ error: "Custom path is too long", success: false });
+    }
+
     if (InvalidSlug.test(slug)) {
       return res.send({ error: "Invalid slug", success: false });
     }
   } else {
     // create slug
+    slug = createSlug(Math.ceil(Math.random() % 12));
   }
-
-  // TODO: create a slug if one wasn't provided
 
   // TODO: add to db
 
