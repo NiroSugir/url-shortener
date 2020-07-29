@@ -69,11 +69,12 @@ app.post("/create", async (req, res) => {
     });
   }
 
-  // TODO: add to db
+  // add to db
+  await client.set(`slug:${slug}`, url);
 
-  // TODO: substitute the placeholder with the real redirect address
+  // substitute the placeholder with the real redirect address
   res.send({
-    redirectUrl: "http://new-redirect",
+    redirectUrl: `${HOSTNAME}/${slug}`,
     success: true,
   });
 });
