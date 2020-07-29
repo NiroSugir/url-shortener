@@ -46,17 +46,24 @@ app.post("/create", async (req, res) => {
   try {
     new URL(url);
   } catch (e) {
-    return res.send({ error: "Invalid url", success: false });
+    return res.send({ error: "Invalid url.", success: false });
   }
 
   // TODO: create a slug if one wasn't provided
   if (typeof slug === "string" && slug.length > 0) {
     if (slug.length > 12) {
-      return res.send({ error: "Custom path is too long", success: false });
+      return res.send({
+        error: "Custom path is too long. May not be over 12 characters long.",
+        success: false,
+      });
     }
 
     if (InvalidSlug.test(slug)) {
-      return res.send({ error: "Invalid slug", success: false });
+      return res.send({
+        error:
+          "Invalid custom path. May contain only letters, numbers, dash (-) and underscore (_).",
+        success: false,
+      });
     }
   } else {
     // create slug
