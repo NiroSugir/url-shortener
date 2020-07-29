@@ -4,20 +4,22 @@ import { URL_SHORTENER_HOME } from "../env";
 
 const HomePage = () => {
   const onSubmit = async (data) => {
-    console.log("data", data);
-
     try {
       let response = await fetch(`${URL_SHORTENER_HOME}/create`, {
         method: "POST",
-        body: {
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
           url: data.url,
           slug: data.slug,
-        },
+        }),
       });
 
       if (!response.ok) {
         throw new Error(response.statusText);
       }
+      console.log("response", await response.json());
     } catch (e) {
       console.error.call(console, e);
     }

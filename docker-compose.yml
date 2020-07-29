@@ -16,6 +16,7 @@ services:
     networks:
       - short-url-net
     command: ["npm", "run", "dev"]
+    # command: ["nodemon", "/usr/src/app/src/index.js"]
     volumes:
       - ./api/app/src:/usr/src/app/src
 

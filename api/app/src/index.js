@@ -1,7 +1,8 @@
 const express = require("express");
-const redis = require("redis");
+const bodyParser = require("body-parser");
+const Redis = require("ioredis");
 const morgan = require("morgan");
-import { createSlug } from "./lib/createSlug";
+const createSlug = require("./lib/createSlug");
 const {
   NODE_ENV,
   REDIS_HOST,
@@ -10,11 +11,11 @@ const {
   PORT,
 } = require("./environment");
 
-const client = redis.createClient({ host: REDIS_HOST, port: REDIS_PORT });
+const client = new Redis(REDIS_PORT, REDIS_HOST);
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(morgan(NODE_ENV === "production" ? "tiny" : "dev"));
 
@@ -59,10 +60,22 @@ app.post("/create", async (req, res) => {
     slug = createSlug(Math.ceil(Math.random() % 12));
   }
 
+  // make sure the slug is unique (the url doesn't have to be however)
+  const slugExists = await client.get(`slug:${slug}`);
+  if (slugExists !== null) {
+    return res.send({
+      error: "Custom path already exists. Please choose another.",
+      success: false,
+    });
+  }
+
   // TODO: add to db
 
   // TODO: substitute the placeholder with the real redirect address
-  res.send({ redirectUrl: "http://new-redirect", success: true });
+  res.send({
+    redirectUrl: "http://new-redirect",
+    success: true,
+  });
 });
 
 app.get("/:slug", (req, res) => {

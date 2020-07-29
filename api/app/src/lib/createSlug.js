@@ -1,4 +1,4 @@
-export const createSlug = (length) => {
+module.exports = createSlug = (length) => {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
   const result = "";
