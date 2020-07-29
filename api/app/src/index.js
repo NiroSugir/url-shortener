@@ -39,7 +39,7 @@ app.post("/create", async (req, res) => {
     return res.send({ error: "Invalid url.", success: false });
   }
 
-  // TODO: create a slug if one wasn't provided
+  // create a slug if one wasn't provided
   if (typeof slug === "string" && slug.length > 0) {
     if (slug.length > 12) {
       return res.send({
